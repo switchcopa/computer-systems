@@ -2,7 +2,6 @@ A computer system consists of hardware and systems software that work together
 to run application programs. Specific implementations of systems change over
 time, but the underlying concepts do not. All computer systems have similar
 hardware and software components that perform similar functions.
-
 Figure 1.1. The hello program
 
 #include <stdio.h>
@@ -110,4 +109,80 @@ varies across systems. Most machines today have word sizes of either 4 bytes (32
 bits) or 8 bytes (64 bits). For the sake of our discussion here, we will assume a word
 size of 4 bytes, and we will assume that buses transfer only one word at a time.
 
-I/O Devices: (Later...)
+I/O Devices:
+Input/output (I/O) devices are the system’s connection to the external world. Our
+example system has four I/O devices: a keyboard and mouse for user input, a
+display for user output, and a disk drive (or simply disk) for long-term storage of
+data and programs. Initially, the executable hello program resides on the disk.
+Each I/O device is connected to the I/O bus by either a controller or an adapter.
+The distinction between the two is mainly one of packaging. Controllers are chip
+sets in the device itself or on the system’s main printed circuit board (often called
+the motherboard). An adapter is a card that plugs into a slot on the motherboard.
+Regardless, the purpose of each is to transfer information back and forth between
+the I/O bus and an I/O device.
+
+Main Memory:
+The main memory is a temporary storage device that holds both a program and
+the data it manipulates while the processor is executing the program. Physically,
+main memory consists of a collection of dynamic random access memory (DRAM)
+chips. Logically, memory is organized as a linear array of bytes, each with its own
+unique address (array index) starting at zero.
+
+Processor:
+The central processing unit (or CPU), or simply processor, is the engine that executes
+instructions stored in main memory. At its core is a word-size storage device, called
+the register file, and a program counter (PC). The processor operates under some
+execution model called the instruction set architecture (or ISA).
+Here
+are some examples of the simple operations that the CPU might carry out at the
+request of an instruction:
+
+Load: Copy a byte or a word from main memory into a register, overwriting
+the previous contents of the register.
+
+Store: Copy a byte or a word from a register to a location in main memory,
+overwriting the previous contents of that location.
+
+Operate: Copy the contents of two registers to the ALU, perform an arithmetic
+operation on the two words, and store the result in a register, overwriting the
+previous contents of that register.
+
+Jump: Extract a word from the instruction itself and copy that word into the
+program counter (PC), overwriting the previous value of the PC.
+
+1.4.2 Running the hello program
+
+Initially, the shell program is executing its instructions, waiting for us to type a
+command. As we type the characters ./hello at the keyboard, the shell program
+reads each one into a register and then stores it in memory.
+When we hit the enter key on the keyboard, the shell knows that we have
+finished typing the command. The shell then loads the executable hello file by
+executing a sequence of instructions that copies the code and data in the hello
+object file from disk to main memory. The data includes the string of characters
+hello, world\n that will eventually be printed out.
+
+1.5 Caches Matter
+
+There are a lot of copying operations involved in the hello program, much of it
+is slowing down what we want to be done in other larger programs. Thus,
+system designers came up with faster, and smaller storage devices called cache
+memories, placed between the processor and the main memory, and copies frequently
+used data so future accesses can be served faster than the slow retrievals
+from main memory.
+
+1.6 Storage Devices Form a Hierarchy
+
+This notion of inserting a smaller, faster storage device (e.g., cache memory)
+between the processor and a larger, slower device (e.g., main memory) turns out
+to be a general idea. In fact, the storage devices in every computer system are
+organized as a memory hierarchy similar to Figure 1.9. As we move from the top
+of the hierarchy to the bottom, the devices become slower, larger, and less costly
+per byte. The register file occupies the top level in the hierarchy, which is known
+as level 0 or L0. We show three levels of caching L1 to L3, occupying memory
+hierarchy levels 1 to 3. Main memory occupies level 4, and so on.
+The main idea of a memory hierarchy is that storage at one level serves as a
+cache for storage at the next lower level. Thus, the register file is a cache for the
+L1 cache. Caches L1 and L2 are caches for L2 and L3, respectively. The L3 cache
+is a cache for the main memory, which is a cache for the disk. On some networked
+systems with distributed file systems, the local disk serves as a cache for data stored
+on the disks of other systems.
