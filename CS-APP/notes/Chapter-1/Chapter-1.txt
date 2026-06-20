@@ -220,4 +220,51 @@ after the other, without interruption. And the code and data of the program appe
 to be the only objects in the system’s memory. These illusions are provided by the
 notion of a process, one of the most important and successful ideas in computer
 science.
+
 A process is the operating system’s abstraction for a running program.
+Traditional systems could only execute one program at a time, while newer multi-
+core processors can execute several programs simultaneously. In either case, a
+single CPU can appear to execute multiple processes concurrently by having the
+processor switch among them. The operating system performs this interleaving
+with a mechanism known as context switching.
+
+The operating system keeps track of all the state information that the process
+needs in order to run. This state, which is known as the context, includes informa-
+tion such as the current values of the PC, the register file, and the contents of main
+memory. At any point in time, a uniprocessor system can only execute the code
+for a single process. When the operating system decides to transfer control from
+the current process to some new process, it performs a context switch by saving
+the context of the current process, restoring the context of the new process, and
+then passing control to the new process.
+
+As Figure 1.12 indicates, the transition from one process to another is man-
+aged by the operating system kernel. The kernel is the portion of the operating
+system code that is always resident in memory. When an application program
+requires some action by the operating system, such as to read or write a file, it
+executes a special system call instruction, transferring control to the kernel. The
+kernel then performs the requested operation and returns back to the application
+program. Note that the kernel is not a separate process. Instead, it is a collection
+of code and data structures that the system uses to manage all the processes.
+
+Kernel: A kernel is a core software program that runs with absolute hardware privileges,
+remaining permanently resident in main memory (RAM) to manage system resources and
+mediate interaction between user application processes and the underlying physical hardware.
+
+1.7.2 Threads
+
+Although we normally think of a process as having a single control flow, in modern
+systems a process can actually consist of multiple execution units, called threads,
+each running in the context of the process and sharing the same code and global
+data.
+A thread is a single sequential flow of execution within a process.
+
+1.7.3 Virtual Memory
+
+Virtual memory is an abstraction that provides each process with the illusion that it
+has exclusive use of the main memory. Each process has the same uniform view of
+memory, which is known as its virtual address space.
+The virtual address space seen by each process consists of a number of well-
+defined areas, each with a specific purpose.
+
+Program data and code.
+Heap.
