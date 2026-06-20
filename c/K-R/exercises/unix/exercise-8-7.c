@@ -13,8 +13,7 @@ static Header *freep = NULL;
 /* malloc: general-purpose storage allocator */
 void *malloc(unsigned nbytes)
 {
-    if (nbytes == 0 || nbytes > TOTAL_UNITS)
-        return NULL;
+    if (nbytes == 0 || nbytes > TOTAL_UNITS) return NULL;
     Header *p, *prevp;
     Header *morecore(unsigned);
     unsigned nunits;

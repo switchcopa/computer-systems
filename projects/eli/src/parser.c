@@ -2,6 +2,7 @@
 /* parser.c */
 #include "lexer.h"
 #include "parser.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
@@ -22,7 +23,7 @@ strdup(char *s)
     return p;
 }
 
-static inline astnode *
+inline static astnode *
 make_binary(astnode *left, Token op, astnode *right)
 {
     astnode *np = malloc(sizeof(astnode));
