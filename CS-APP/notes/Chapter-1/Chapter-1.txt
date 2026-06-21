@@ -266,8 +266,11 @@ memory, which is known as its virtual address space.
 The virtual address space seen by each process consists of a number of well-
 defined areas, each with a specific purpose.
 
-Program data and code.
-Heap.
+Program data and code,
+Heap,
+Shared Libraries,
+Stack,
+Kernel virtual memory.
 
 1.7.4 Files
 
