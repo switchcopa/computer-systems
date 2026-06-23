@@ -303,3 +303,27 @@ local machine to connect to a telnet server on a remote machine. After we log in
 to the remote machine and run a shell, the remote shell is waiting to receive an
 input command. From this point, running the hello program remotely involves
 the five basic steps shown in Figure 1.15. (see CS-APP, 2016)
+
+1.9 Important themes
+
+This concludes our initial whirlwind tour of systems. An important idea to take
+away from this discussion is that a system is more than just hardware. It is a
+collection of intertwined hardware and systems software that must cooperate in
+order to achieve the ultimate goal of running application programs.
+
+Gene Amdahl, one of the early pioneers in computing, made a simple but insight-
+ful observation about the effectiveness of improving the performance of one part
+of a system. This observation has come to be known as Amdahl’s law. The main
+idea is that when we speed up one part of a system, the effect on the overall sys-
+tem performance depends on both how significant this part was and how much
+it sped up. Consider a system in which executing some application requires time
+T_old. Suppose some part of the system requires a fraction α of this time, and that
+we improve its performance by a factor of k. That is, the component originally re-
+quired time αT_old, and it now requires time (αT_old)/k. The overall execution time
+would thus be
+
+T_new = (1 - α)T_old + (αT_old)/k
+      = T_old[(1 - α)+ α/k]
+From this, we can compute the speedup S = T_old/T_new as
+
+S = 1/[(1 - α) + α/k] (1.1)
