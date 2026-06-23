@@ -16,5 +16,27 @@ your trip of 1.67×?
 
 Solution:
 A. We need to get the underlying variables in the speedup formula for the trip.
-First, the component being enhanced is the portion of the trip that takes place
-in Montana.
+First, the component being enhanced is the speed of the portion of the trip
+that takes place in Montana.
+Next, we look at the time dependent factor we would name f. In the original
+case, to cover 1500km along Montana at 100km/h, we would need
+1500/100 = 25 hours.
+Therefore, the time dependent improvement factor f is:
+f = 15 hours/25 hours = 0.6.
+
+The performance ratio here is k, which is the ratio between the
+new speed (150km/h) and the old speed (100km/h), thus:
+k = 150/100 = 1.5.
+Hence, we have the variables for the speedup formula, and:
+
+S = 1/[(1-f) + f/k] = 1.25
+
+B. 
+S = 1/[(1-f) + f/k]
+1-f+f/k = 1/S
+1 - f(1-1/k) = 1/S
+f(1-1/k) = 1-1/S
+1-1/k = 1/f(1-1/S)
+1/k = 1/f(f - (1 - 1/S))
+
+Hence: k = f/(f - (1 - 1/S)) approximately 3
