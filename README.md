@@ -1,5 +1,4 @@
 # computer-systems
-
 A collection of exercises, notes, experiments, and projects completed while studying computer science and systems programming. This serves as a repository that documents what I learned concerning low level systems programming.
 
 ## Topics
@@ -29,15 +28,12 @@ Most of the code in this repository consists of:
 
 ```text
 computer-systems/
-├── CS-APP/
-├── K-R/
-├── assembly_x86_64/
+├── c/
 ├── cpp/
+├── CS-APP/
 ├── dsa/
-├── graphics/
 ├── lib/
-├── projects/
-└── small-programs/
+└── projects/
 ```
 
 The structure may change as new topics are explored.
