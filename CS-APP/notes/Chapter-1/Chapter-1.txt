@@ -213,8 +213,6 @@ each in turn.
 1.7.1 Processes
 
 When a program such as hello runs on a modern system, the operating system
-provides the illusion that the program is the only one running on the system. The
-program appears to have exclusive use of both the processor, main memory, and
 I/O devices. The processor appears to execute the instructions in the program, one
 after the other, without interruption. And the code and data of the program appear
 to be the only objects in the system’s memory. These illusions are provided by the
