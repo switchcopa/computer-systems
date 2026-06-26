@@ -31,7 +31,7 @@ Hence, we have the variables for the speedup formula, and:
 
 S = 1/[(1-f) + f/k] = 1.25
 
-B. 
+B.
 S = 1/[(1-f) + f/k]
 1-f+f/k = 1/S
 1 - f(1-1/k) = 1/S

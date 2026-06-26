@@ -324,6 +324,77 @@ would thus be
 
 T_new = (1 - α)T_old + (αT_old)/k
       = T_old[(1 - α)+ α/k]
+
 From this, we can compute the speedup S = T_old/T_new as
 
 S = 1/[(1 - α) + α/k] (1.1)
+
+1.9.2 Concurrency and Parallelism
+
+Throughout the history of digital computers, two demands have been constant
+forces in driving improvements: we want them to do more, and we want them to
+run faster. Both of these factors improve when the processor does more things at
+once. We use the term concurrency to refer to the general concept of a system with
+multiple, simultaneous activities, and the term parallelism to refer to the use of
+concurrency to make a system run faster. Parallelism can be exploited at multiple
+levels of abstraction in a computer system. We highlight three levels here, working
+from the highest to the lowest level in the system hierarchy.
+
+Thread-Level Concurrency
+
+When we look at how a modern processor coordinates thread-level concurrency, 
+instruction-level parallelism, and SIMD operations simultaneously, we see a 
+beautifully synchronized stack of abstractions working from the macro level down to 
+the micro level. At the very top sits thread-level concurrency, which is entirely 
+about managing distinct execution paths that share a single process's memory space. 
+This is the domain of the operating system scheduler and the programmer, where 
+completely different tasks—like handling a user login while simultaneously 
+downloading a file—are mapped onto separate logical CPU cores. Each thread maintains 
+its own independent identity through its own program counter and stack pointer, 
+allowing the system to achieve high-level multitasking either through rapid time-
+slicing on a single core or true concurrent execution across multiple physical cores.
+
+Instruction Level Parallelism
+
+As we dive deeper inside any one of those individual active cores, instruction-level 
+parallelism takes over automatically at the hardware level. Even though a single 
+thread provides a sequential list of assembly instructions, the core's internal 
+control unit refuses to process them in a strict, slow line. Instead, the superscalar 
+hardware inspects the incoming stream, dynamically identifies instructions that do 
+not depend on each other's results, and dispatches them to separate internal 
+execution units at the exact same physical instant. While one arithmetic logic unit 
+is busy calculating a memory offset, another might be executing an unrelated 
+multiplication, allowing a single thread to extract extra performance directly out of 
+the silicon without any explicit guidance from the programmer or the operating system.
+
+Single-Instruction Multiple-Data (SIMD) Parallelism
+
+At the absolute lowest level of data processing sits SIMD parallelism, which changes 
+the strategy from executing different instructions to scaling up the volume of data a 
+single instruction can touch. Rather than relying on standard registers that hold 
+only a single value, SIMD hardware utilizes massive vector registers designed to pack 
+entire arrays of data elements side by side. When the CPU executes a specialized 
+vector instruction, it triggers a wide network of parallel hardware lanes to apply 
+that single mathematical operation to every element in the register simultaneously. 
+This makes SIMD exceptionally powerful for heavy data-crunching workloads like 
+graphics rendering, matrix math, and streaming media, where the exact same 
+transformation must be applied to millions of individual data points.
+
+Ultimately, these three tiers of parallelism do not compete with one another; they 
+compose a unified execution pipeline. A high-performance application will use thread-
+level concurrency to distribute massive chunks of a problem across all available CPU 
+cores. Inside each core, the hardware naturally relies on instruction-level 
+parallelism to keep its internal pipelines saturated and eliminate idle cycles. 
+Simultaneously, the core executes SIMD instructions within those pipelines to crunch 
+through data arrays at a fraction of the time a traditional loop would require. 
+Through this multi-layered approach, modern computing achieves a balance of flexible 
+multitasking and raw mathematical speed.
+
+1.10 Summary
+
+A computer system consists of hardware and systems software that cooperate
+to run application programs. Information inside the computer is represented as
+groups of bits that are interpreted in different ways, depending on the context.
+Programs are translated by other programs into different forms, beginning as
+files.
+ASCII text and then translated by compilers and linkers into binary executable
