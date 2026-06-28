@@ -10,7 +10,8 @@ Following these rules ensures consistency, readability, and alignment with K&R s
 - All functions must be defined like this:
 
 ```c
-type function_name(arguments) {
+type function_name(arguments)
+{
     ...
 }
 ```
@@ -18,7 +19,8 @@ type function_name(arguments) {
 . Example:
 
 ```c
-int add_numbers(int a, int b) {
+int add_numbers(int a, int b)
+{
     return a + b;
 }
 ```
@@ -107,7 +109,8 @@ const int max_size = 100;
 - Use inline functions (if macros are unsafe): for small functions that need type safety, inline can replace a macro:
 
 ```c
-inline int max(int a, int b) {
+inline int max(int a, int b)
+{
     return a > b ? a : b;
 }
 ```
