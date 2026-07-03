@@ -1,0 +1,35 @@
+
+Practice Problem 2.1 
+
+A. 0x25B9D2 to binary
+
+I will solve these problems by taking each hex value from
+the right to the left, and translating them to their proper
+binary value, or vice versa.
+
+Example: 
+2 -> 0010
+D -> 1101
+9 -> 1001
+B -> 1011
+5 -> 0101
+2 -> 0010
+
+Solution: 001001011011100111010010
+
+B. binary 1010111001001001 to hexadecimal
+
+1001 -> 9
+0100 -> 4
+1110 -> E
+1010 -> A
+
+Solution: 0xAE49
+
+C. 0xA8B3D to binary
+
+solution: 10101000101100111101
+
+D. binary 1100100010110110010110 to hexadecimal
+
+solution: 0x322D96

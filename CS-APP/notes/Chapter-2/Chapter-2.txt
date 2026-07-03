@@ -1,0 +1,36 @@
+
+Chapter 2 Representing and Manipulating Information
+
+Modern computers dominate the world by manipulating a staggering variety of information—ranging from complex geometric models in a real-time rendering engine to the abstract syntax trees of a optimizing compiler. Yet, beneath these sophisticated abstractions, a modern digital computer relies on a deceptively simple foundation: the signal voltage of a transistor, abstracted into a single binary digit, or bit.
+
+A solitary bit possesses no inherent meaning; it is merely a choice between 0 and 1. To represent anything of substance, we must isolate bits into bounded sequences, typically groups of eight called bytes, and apply a strict mathematical framework to give them form. A block of memory containing the byte sequence 0x41 could represent the integer 65, the character 'A' in an ASCII string, or a single-precision floating-point denormalized value. The machine hardware makes no distinction. The meaning, execution, and validity of these bit patterns are derived entirely from the context in which they are read—dictated by the data types defined in our high-level languages and the specific machine instructions chosen to manipulate them.
+
+As programmers, we are often shielded from this reality by compiler abstractions that present an illusion of bounded mathematical perfection. However, because computer representations are finite, this illusion inevitably breaks down. Unsigned integers will abruptly wrap around to zero upon overflow; multiplying two large positive signed integers can yield a negative result; and floating-point addition can fail the basic algebraic law of associativity.
+
+To write robust, secure, and performant systems software, a programmer cannot afford to treat these behaviors as random anomalies. We must understand the underlying binary encodings, the precise bit-level mechanics of computer arithmetic, and the subtle interplay between signed and unsigned operations. This chapter examines how a machine represents integers, floating-point numbers, and text, exposing the architectural constraints and mathematical rules that govern how information is truly manipulated under the hood.
+
+2.1 Information Storage
+
+Rather than accessing individual bits in memory, most computers use blocks of
+8 bits, or bytes, as the smallest addressable unit of memory. A machine-level
+program views memory as a very large array of bytes, referred to as virtual
+memory. Every byte of memory is identified by a unique number, known as its
+address, and the set of all possible addresses is known as the virtual address space.
+As indicated by its name, this virtual address space is just a conceptual image
+presented to the machine-level program. The actual implementation (presented
+in Chapter 9) uses a combination of dynamic random access memory (DRAM),
+flash memory, disk storage, special hardware, and operating system software to
+provide the program with what appears to be a monolithic byte array.
+
+2.1.1 Hexadecimal Notation
+A single byte consists of 8 bits. In binary notation, its value ranges from 00000000_2
+to 11111111_2 . When viewed as a decimal integer, its value ranges from 0_10 to 255_10.
+Neither notation is very convenient for describing bit patterns. Binary notation
+is too verbose, while with decimal notation it is tedious to convert to and from
+bit patterns. Instead, we write bit patterns as base-16, or hexadecimal numbers.
+Hexadecimal (or simply “hex”) uses digits ‘0’ through ‘9’ along with characters
+‘A’ through ‘F’ to represent 16 possible values. Figure 2.2 (CS:APP) shows the
+decimal and binary values associated with the 16 hexadecimal digits.
+Written in hexadecimal, the value of a single byte can range from 00_16 to FF_16.
+(The technique to convert from a hexadecimal binary to a binary value or vice versa
+is covered in the same section)
