@@ -23,6 +23,7 @@ flash memory, disk storage, special hardware, and operating system software to
 provide the program with what appears to be a monolithic byte array.
 
 2.1.1 Hexadecimal Notation
+
 A single byte consists of 8 bits. In binary notation, its value ranges from 00000000_2
 to 11111111_2 . When viewed as a decimal integer, its value ranges from 0_10 to 255_10.
 Neither notation is very convenient for describing bit patterns. Binary notation

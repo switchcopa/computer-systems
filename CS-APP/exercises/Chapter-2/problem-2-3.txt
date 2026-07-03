@@ -1,0 +1,7 @@
+Practice Problem 2.3 (solution page 180)
+
+A single byte can be represented by 2 hexadecimal digits. Fill in the missing
+entries in the following table, giving the decimal, binary, and hexadecimal values
+of different byte patterns:
+
+solution: (look at the problem-2-3.c solution)
