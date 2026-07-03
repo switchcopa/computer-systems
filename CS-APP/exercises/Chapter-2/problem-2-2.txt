@@ -1,0 +1,14 @@
+
+Practice Problem 2.2 (solution page 179)
+
+Fill in the blank entries in the following table, giving the decimal and hexadecimal
+representations of different powers of 2:
+
+n       2^n (decimal)     2^n (hexadecimal)
+5       32                0x20
+23      8388608           0x800000
+15      32768             0x8000
+13      8192              0x2000
+12      4096              0x1000
+6       64                0x40
+10      1024              0x100
