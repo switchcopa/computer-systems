@@ -62,3 +62,105 @@ Conversely, to convert a hexadecimal number to decimal, we can multiply
 each of the hexadecimal digits by the appropriate power of 16. For example, given
 the number 0x7AF, we compute its decimal equivalent as 7 . 162 + 10 . 16 + 15 =
 7 . 256 + 10 . 16 + 15 = 1,792 + 160 + 15 = 1,967.
+
+2.1.2 Data Sizes
+
+Every computer has a word size, indicating the nominal size of pointer data. Since
+a virtual address is encoded by such a word, the most important system parameter
+determined by the word size is the maximum size of the virtual address space. That
+is, for a machine with a w-bit word size, the virtual addresses can range from 0 to
+2^w − 1, giving the program access to at most 2^w bytes.
+
+2.1.3 Addressing and Byte Ordering
+
+For program objects that span multiple bytes, we must establish two conventions:
+what the address of the object will be, and how we will order the bytes in memory.
+In virtually all machines, a multi-byte object is stored as a contiguous sequence
+of bytes, with the address of the object given by the smallest address of the bytes
+used. For example, suppose a variable x of type int has address 0x100; that is, the
+value of the address expression &x is 0x100. Then (assuming data type int has a
+32-bit representation) the 4 bytes of x would be stored in memory locations 0x100,
+0x101, 0x102, and 0x103.
+
+For ordering the bytes representing an object, there are two common conven-
+tions. Consider a w-bit integer having a bit representation [xw−1, xw−2 , . . . , x1, x0],
+where xw−1 is the most significant bit and x0 is the least. Assuming w is a multiple
+of 8, these bits can be grouped as bytes, with the most significant byte having bits
+[xw−1, xw−2 , . . . , xw−8], the least significant byte having bits [x7, x6, . . . , x0], and
+the other bytes having bits from the middle. Some machines choose to store the ob-
+ject in memory ordered from least significant byte to most, while other machines
+store them from most to least. The former convention—where the least significant
+byte comes first—is referred to as little endian. The latter convention—where the
+most significant byte comes first—is referred to as big endian.
+
+Figure 2.4 shows C code that uses casting to access and print the byte rep-
+resentations of different program objects. We use typedef to define data type
+byte_pointer as a pointer to an object of type unsigned char. Such a byte pointer
+references a sequence of bytes where each byte is considered to be a nonnega-
+tive integer. The first routine show_bytes is given the address of a sequence of
+bytes, indicated by a byte pointer, and a byte count. The byte count is specified as
+having data type size_t, the preferred data type for expressing the sizes of data
+structures. It prints the individual bytes in hexadecimal. The C formatting direc-
+tive %.2x indicates that an integer should be printed in hexadecimal with at least
+2 digits.
+
+
+#include <stdio.h>
+
+typedef unsigned char* byte_pointer;
+
+void show_bytes(byte_pointer start, size_t len) {
+    int i;
+    for (i = 0; i < len; i++)
+        printf(" %.2x", start[i]);
+    printf("\n");
+}
+
+void show_int(int x) {
+    show_bytes((byte_pointer) &x, sizeof(int));
+}
+
+void show_float(float x) {
+    show_bytes((byte_pointer) &x, sizeof(float));
+}
+
+void show_pointer(void *x) {
+    show_bytes((byte_pointer) &x, sizeof(void *));
+}
+
+Procedures show_int, show_float, and show_pointer demonstrate how to
+use procedure show_bytes to print the byte representations of C program objects
+of type int, float, and void *, respectively. Observe that they simply pass show_
+bytes a pointer &x to their argument x, casting the pointer to be of type unsigned
+char *. This cast indicates to the compiler that the program should consider the
+pointer to be to a sequence of bytes rather than to an object of the original data
+type. This pointer will then be to the lowest byte address occupied by the object.
+These procedures use the C sizeof operator to determine the number of bytes
+used by the object. In general, the expression sizeof(T ) returns the number of
+bytes required to store an object of type T . Using sizeof rather than a fixed value
+is one step toward writing code that is portable across different machine types.
+
+We ran the code shown in Figure 2.5 on several different machines, giving the
+results shown in Figure 2.6. The following machines were used:
+
+void test_show_bytes(int val) {
+    int ival = val;
+    float fval = (float) ival;
+    int *pval = &ival;
+    show_int(ival);
+    show_float(fval);
+    show_pointer(pval);
+}
+
+Observe that although the floating-point and the integer data both encode
+the numeric value 12,345, they have very different byte patterns: 0x00003039
+for the integer and 0x4640E400 for floating point. In general, these two formats
+use different encoding schemes. If we expand these hexadecimal patterns into
+binary form and shift them appropriately, we find a sequence of 13 matching bits,
+indicated by a sequence of asterisks, as follows:
+
+00000000000000000011000000111001
+                   *************
+          01000110010000001110010000000000
+This is not coincidental. We will return to this example when we study floating-
+point formats.
