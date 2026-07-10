@@ -164,3 +164,34 @@ indicated by a sequence of asterisks, as follows:
           01000110010000001110010000000000
 This is not coincidental. We will return to this example when we study floating-
 point formats.
+
+2.1.5 Representing Code
+Consider the following C function:
+
+int sum(int x, int y) {
+    return x + y;
+}
+
+When compiled on our sample machines, we generate machine code having
+the following byte representations:
+
+Linux 32 55 89 e5 8b 45 0c 03 45 08 c9 c3
+Windows  55 89 e5 8b 45 0c 03 45 08 5d c3
+Linux 64 55 48 89 e5 89 7d fc 89 75 f8 03 45 fc c9 c3
+
+Here we find that the instruction codings are different. Different machine types
+use different and incompatible instructions and encodings. Even identical proces-
+sors running different operating systems have differences in their coding conven-
+tions and hence are not binary compatible. Binary code is seldom portable across
+different combinations of machine and operating system.
+A fundamental concept of computer systems is that a program, from the
+perspective of the machine, is simply a sequence of bytes. The machine has no
+information about the original source program, except perhaps some auxiliary
+tables maintained to aid in debugging. We will see this more clearly when we study
+machine-level programming in Chapter 3.
+
+2.1.6 Introduction to Boolean Algebra
+
+(CS:APP shows operations of boolean algebra, some bit vectors, mathematical
+finite sets, etc... just some tedious stuff go read it in CS:APP)
+

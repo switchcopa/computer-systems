@@ -1,0 +1,9 @@
+
+What would be printed as a result of the following call to show_bytes?
+const char *m = "mnopqr";
+
+show_bytes((byte_pointer) m, strlen(m));
+Note that letters ‘a’ through ‘z’ have ASCII codes 0x61 through 0x7A.
+
+Solution:
+6d 6e 6f 70 71 72
