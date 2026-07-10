@@ -1,0 +1,22 @@
+
+Using show_int and show_float, we determine that the integer 2607352 has hexa-
+decimal representation 0x0027C8F8, while the floating-point number 3510593.0
+has hexadecimal representation 0x4A1F23E0.
+
+A. Write the binary representations of these two hexadecimal values.
+B. Shift these two strings relative to one another to maximize the number of
+matching bits. How many bits match?
+C. What parts of the strings do not match?
+
+Solutions:
+A. 
+0x0027C8F8 = 0000 0000 0010 0111 1100 1000 1111 1000
+0x4A1F23E0 = 0100 1010 0001 1111 0010 0011 1110 0000
+
+B.
+00000000001001111100100011111000
+  01001010000111110010001111100000
+18 bits match
+
+C.
+I see that the upper and lower part of the bits don't match
