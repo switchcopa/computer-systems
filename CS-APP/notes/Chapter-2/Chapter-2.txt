@@ -191,7 +191,30 @@ tables maintained to aid in debugging. We will see this more clearly when we stu
 machine-level programming in Chapter 3.
 
 2.1.6 Introduction to Boolean Algebra
+2.1.7 Bit-Level Operations in C
+2.1.8 Logical Operations in C
+2.1.9 Shift Operations in C
 
 (CS:APP shows operations of boolean algebra, some bit vectors, mathematical
 finite sets, etc... just some tedious stuff go read it in CS:APP)
 
+2.2 Integer Representations
+
+Let's talk about integer arithmetic in computer systems. Let there be two
+unsigned integers, x and y, of word size w. We know that both of their
+ranges are [0, 2^w). If we try to get their sum, the required range shifts to
+[0, 2^{w+1} - 1], meaning we would need w + 1 bits to represent the exact
+mathematical sum. But because of the finite, fixed word size of unsigned 
+integers in many programming languages, this sum wraps around modulo 2^w.
+
+In unsigned arithmetic, this is called unsigned overflow. An arithmetic
+operation is said to overflow if the resulting mathematical integer cannot
+fit within the word size of the original data type.Take, for example, the
+unsigned integer 65535 (which is 2^{16} - 1) represented as an 
+unsigned short in C. If we add 1 to this 16-bit unsigned integer, the
+result is 0; that is overflow. In C, unsigned overflow is not considered
+undefined behavior or an error—it is a well-defined operation. At times, 
+however, we might wish to determine whether an unsigned overflow has occurred.
+Detecting overflows of unsigned addition:For our x, y, and s = x + y
+(where + represents w-bit unsigned addition), the operation overflowed
+if and only if s < x (or equivalently, s < y).
