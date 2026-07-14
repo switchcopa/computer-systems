@@ -218,3 +218,24 @@ however, we might wish to determine whether an unsigned overflow has occurred.
 Detecting overflows of unsigned addition:For our x, y, and s = x + y
 (where + represents w-bit unsigned addition), the operation overflowed
 if and only if s < x (or equivalently, s < y).
+
+Now onto Two's complement addition. For a word size w, the range of a two's
+complement integer is [-2^{w-1}, 2^{w-1} - 1]. For example, with a 4-bit word
+size, the range is [-8, 7]. An overflow in two's complement addition occurs
+when the mathematical sum of the two signed integers exceed the maximum
+positive limit, OR, falls below the minimum negative limit. The two's
+complement overflow is defined as follows:
+
+            { x + y - 2^w, if 2^{w-1} <= x + y Positive overflow
+    x + y = { x + y      , if -2^{w-1} <= x + y <= 2^{w-1} - 1 Normal
+            { x + y + 2^w, if x + y < -2^{w-1} Negative overflow
+
+This principle shows that if the sum of two signed integer in the range
+[-2^{w-1}, 2^{w-1}-1] exceeds this upper limit, positive overflow occurs
+and we subtract 2^w from the result. While negative overflow occurs when
+the result is less than the lower bound of their range, and the effect
+of truncation is to add 2^w to the sum.
+Note: doing a simple case analysis, we see that if x and y have two different
+signs, that is one is positive and the other is negative, the result never
+overflows. So overflow only and only occurs when both operands have the same
+sign.
