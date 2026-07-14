@@ -235,7 +235,31 @@ This principle shows that if the sum of two signed integer in the range
 and we subtract 2^w from the result. While negative overflow occurs when
 the result is less than the lower bound of their range, and the effect
 of truncation is to add 2^w to the sum.
+
 Note: doing a simple case analysis, we see that if x and y have two different
 signs, that is one is positive and the other is negative, the result never
 overflows. So overflow only and only occurs when both operands have the same
 sign.
+
+Aside: In C however, integer overflow is actually undefined behavior. This is
+due to C's philosophy, as it is supposed to work on all architectures.
+Some architectures still use one's complement instead of the standard two's
+complement, and it behaves differently, of course. Why do we care about this?
+Well suppose we want to detect whether the sum of two integers overflows,
+how could we implement that?
+
+If we run something like this with gcc with optimization flags
+enabled (-O2 or -O3);
+
+int x = INT_MAX;
+int y = INT_MAX - 1;
+if (x + y < 0)
+{
+    // do something about it
+}
+
+the optimizer may not generate the assembly for the if statement, that's
+because it then assumes that since x is positive, y is positive, then
+the result is obviously positive, which is mathematically true, if we ignore
+two's complement overflow. So, we need different ways to see whether the sum
+of two signed integers overflows.
