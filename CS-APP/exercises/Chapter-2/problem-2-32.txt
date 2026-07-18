@@ -1,0 +1,44 @@
+
+/*
+You are assigned the task to write code for a function tsub_ok, with
+arguments x, y, that will return 1 if computing x - y does not result
+in overflow. Having just written the solution for problem 2-30, you
+write the following:
+
+// this is what I wrote
+int tadd_ok(int x, int y)
+{
+    unsigned ux = (unsigned)x;
+    unsigned uy = (unsigned)y;
+    unsigned usum = ux + uy;
+
+    signed int sum = (int)usum;
+
+    if ((x ^ y) >= 0 && (sum ^ x) < 0)
+        return 0;
+    return 1;
+}
+
+int tsub_ok(int x, int y);
+{
+    return tadd_ok(x, -y);
+}
+
+For which input does this function give incorrect results?
+
+Solution:
+An example I would immediately think of is, for example,
+for inputs x = -5 and y = TMIN, and let's assume we're
+working with 8 bit integers.
+when we negate y, the mathematical value expected would be
+the value 128, but the range of an 8 bit signed integer is
+only [-128, 127], so the negation results in an overflow.
+Until C23, signed integer overflow is considered undefined
+behavior. So this may give any result, and it is not
+consistent and may differ from compiler or architecture to
+another.
+
+So for specific any input where x < 0 and y = TMIN, the
+function gives incorrect results and overflows before even
+tadd_ok enters its body execution.
+*/
