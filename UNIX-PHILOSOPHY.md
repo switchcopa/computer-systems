@@ -1,4 +1,5 @@
 # Unix Philosophy
+
 * Rule of Modularity: Write simple parts connected by clean interfaces.
 * Rule of Clarity: Clarity is better than cleverness.
 * Rule of Composition: Design programs to be connected to other programs.
