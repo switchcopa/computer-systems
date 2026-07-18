@@ -9,3 +9,5 @@ build/*
 /.vscode
 .vscode/*
 *.out
+.*.sw[a-z]
+*.swp
