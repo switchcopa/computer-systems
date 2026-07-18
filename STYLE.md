@@ -113,7 +113,7 @@ const int max_size = 100;
 
 - Use the `static` keyword for functions that are supposed to be file-scope only.
 ```c
-inline static int max(int a, int b)
+static inline int max(int a, int b)
 {
     return a > b ? a : b;
 }
