@@ -1,7 +1,7 @@
 # STYLE
 
-This file defines the coding rules and conventions for this repository, which contains exercises
-and programs based on **The C Programming Language** by K&R.
+This file defines the C programming rules and conventions for this repository,
+which contains exercises and programs based on **The C Programming Language** by K&R.
 Following these rules ensures consistency, readability, and alignment with K&R style.
 
 ---
@@ -45,18 +45,21 @@ int add_numbers(int a, int b)
 
 ## 4. Loops and Conditionals
 
-All `if`, `for` and `while` statements should follow this K&R multi-line style:
+All `if`, `for` and `while` statements should follow this style:
 
 ```c
-while (condition) {
+while (condition)
+{
     ...
 }
 
-for (init; condition; increment) {
+for (init; condition; increment)
+{
     ...
 }
 
-if (condition) {
+if (condition)
+{
     ...
 }
 ```
@@ -104,18 +107,19 @@ double area = PI * radius * radius;  // instead of computing each time
 ```c
 const int max_size = 100;
 ```
-- Avoid unnecessary memory allocations: reuse buffers or structures when possible.
+- Avoid unnecessary memory allocations: use buffers or structures instead, when possible.
 
 - Use inline functions (if macros are unsafe): for small functions that need type safety, inline can replace a macro:
 
+- Use the `static` keyword for functions that are supposed to be file-scope only.
 ```c
-inline int max(int a, int b)
+inline static int max(int a, int b)
 {
     return a > b ? a : b;
 }
 ```
 
-- Use bitwise operations when appropriate for flags, masks, or powers of two.
+- Use bitwise operations when appropriate for flags, masks, etc... .
 
 ```c
 int is_even = (x & 1) == 0;
