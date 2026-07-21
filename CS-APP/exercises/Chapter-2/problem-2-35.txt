@@ -1,0 +1,96 @@
+
+/*
+You are given the assignment to develop code for a function tmult_ok
+that will determine whether two arguments can be multiplied without
+causing overflow. Here is your solution:
+
+int tmult_ok(int x, int y)
+{
+    int p = x*y;
+    return !x || p/x == y;
+}
+
+You test this code for a number of values x and y, and it seems to 
+work properly. Your coworker challenges you, saying: "If I can't use
+subtraction to test whether addition has overflowed, then how can you
+use division to test whether multiplication has overflowed?"
+Devise a mathematical justification of your approach, along the
+following lines. First, argue that the case x = 0 is handled correctly.
+Otherwise, consider w-bit numbers x (x != 0), y, p, and q, where p
+is the result of performing two's complement multiplication on x and y,
+and q is the result of dividing p by x.
+
+1. Show that x*y, the product of x and y, can be written in the form
+x*y = p + t*2^w where t != 0 if and only if the computation of p
+overflows.
+2. Show that p can be written in the form p = x*q + r, where |r| < |x|.
+3. Show that q = y if and only if r = t = 0.
+*/
+
+/*
+
+Notation:
+. == means "congruent to".
+
+1. We want to prove: x*y = p + t*2^w, t != 0 <=> p overflowed
+Proof: (=>) This direction is trivial to prove. Suppose the
+product x*y can be written as x*y = p + t*2^w where t is
+non-zero, then p = x*y - t*2^w != x*y, which is only possible
+if the computation of p has overflowed.
+(<=) We begin with the assumption that p has overflowed, then,
+by the definition of two's complement multiplication:
+
+        x *^t_w y = B2T_w(x*y mod 2^w),
+which implies:
+
+        T2B_w(x *^t_w y) = x*y mod 2^w,
+
+because for any w-bit integer z:
+
+        T2B_w(B2T_w(z)) = B2T_w(T2B_w(z))
+Hence we see that p = T2B_w(x *^t_w y) = x*y mod 2^w.
+By assumption, p has overflowed so the truncation modulo 2^w
+has also happened. It follows that there exists a non-zero t
+such that:
+
+        p = x*y - t*2^w,
+
+Rearranging the equation gives us:
+
+        x*y = p + t*2^w.
+
+Finishing the other direction of the proof. \boxed{}
+
+Note that this handles both cases of underflow and overflow
+of the computation of p, and the only importance is the
+existence of the non zero t, not its sign.
+
+2. Proof: By applying the fundamental definitions of modular
+arithmetic, we know that division in Z would look something
+like this:
+
+        p == r (mod x) <=> (exists integer q in Z): p = x*q + r
+
+where p is the two's complement product of x and y, q is the
+quotient, and r is the remainder which satisfies 
+        0 <= |r| < |x|
+by definition. \boxed{}
+
+3. Proof: (=>) Assume q = y. Looking at our previous proof:
+        p = x*q + r,
+where |r| < |x|. By our assumption, q is the quotient and
+the result of dividing p by x, then p = x*y, and p hasn't
+overflowed.
+Hence we get the two results we liked:
+
+        p = x*q + r = x*y + r,
+
+implies r = 0, and the first problem is the same as:
+        
+        p hasn't overflowed <=> for all t != 0: x*y != p + t*2^w.
+So:
+        x*y = p + t*2^w = p + 0*2^w,
+thus t = 0, finishing our proof. \boxed{}
+*/
+
+
