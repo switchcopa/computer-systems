@@ -1,0 +1,29 @@
+
+/*
+As we will see in chapter 3, the LEA instruction performs
+computations of the form (a << k) + b, where k is either
+0, 1, 2 or 3, and b is 0 or some program value.
+The compiler often uses this instruction to perform
+multiplications by constant factors. For example, we can
+compute 3*a as (a << 1) + a. Considering cases where b is
+either 0 or equal to a, and all possible values of k, what
+multiples of a can be computed with a single LEA instruction?
+*/
+
+
+/*
+Solution:
+If b = 0:
+    k = 0 => (a << k) + b = 1*a
+    k = 1 => (a << k) + b = 2*a
+    k = 2 => (a << k) + b = 4*a
+    k = 3 => (a << k) + b = 8*a
+If b = 1:
+    k = 0 => (a << k) + b = 2*a
+    k = 1 => (a << k) + b = 3*a
+    k = 2 => (a << k) + b = 5*a
+    k = 3 => (a << k) + b = 9*a
+
+The possible values for N:
+    N \in {1,2,3,4,5,8,9}
+*/
