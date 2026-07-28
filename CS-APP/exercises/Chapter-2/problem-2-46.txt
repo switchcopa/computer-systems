@@ -1,0 +1,78 @@
+
+
+The imprecision of floating-point arithmetic can have disastrous effects. On Febru-
+ary 25, 1991, during the first Gulf War, an American Patriot Missile battery in
+Dharan, Saudi Arabia, failed to intercept an incoming Iraqi Scud missile. The
+Scud struck an American Army barracks and killed 28 soldiers. The US General
+
+Accounting Office (GAO) conducted a detailed analysis of the failure [76] and de-
+termined that the underlying cause was an imprecision in a numeric calculation.
+In this exercise, you will reproduce part of the GAO’s analysis.
+The Patriot system contains an internal clock, implemented as a counter
+that is incremented every 0.1 seconds. To determine the time in seconds, the
+program would multiply the value of this counter by a 24-bit quantity that was
+a fractional binary approximation to 1/10. In particular, the binary representation
+of 1/10 is the nonterminating sequence 0.000110011[0011]..._2, where the portion in
+brackets is repeated indefinitely. The program approximated 0.1, as a value x, by
+considering just the first 23 bits of the sequence to the right of the binary point:
+x = 0.00011001100110011001100. (See Problem 2.51 for a discussion of how they
+could have approximated 0.1 more precisely.)
+
+A. What is the binary representation of 0.1 − x?
+
+B. What is the approximate decimal value of 0.1 − x?
+
+C. The clock starts at 0 when the system is first powered up and keeps counting
+up from there. In this case, the system had been running for around 100 hours.
+What was the difference between the actual time and the time computed by
+the software?
+
+D. The system predicts where an incoming missile will appear based on its
+velocity and the time of the last radar detection. Given that a Scud travels
+at around 2,000 meters per second, how far off was its prediction?
+Normally, a slight error in the absolute time reported by a clock reading would
+not affect a tracking computation. Instead, it should depend on the relative time
+between two successive readings. The problem was that the Patriot software had
+been upgraded to use a more accurate function for reading time, but not all of
+the function calls had been replaced by the new code. As a result, the tracking
+software used the accurate time for one reading and the inaccurate time for the
+other [103].
+
+Solution:
+
+A. I am guessing the problem wants a pure mathematical operation, rather
+than operating in fixed-size binary representation of the bits.
+The 0.1 decimal literal is the non-terminating sequence of bits
+0.00011001100110011..._2, and so the subtraction 0.1 - x works as
+follows:
+                             24th-bit (from the leading '.')
+                             *
+    0.0001100110011001100110011001100...
+   -
+    0.00011001100110011001100
+    -----------------------------------
+    0.0000000000000000000000011001100...
+
+So the result of the raw fraction here is: 
+0.000000000000000000000001100[1100]..._2
+where the numbers in the brackets are repeated infinitely.
+
+Hence:
+0.1 - x = 2^-24 + 2^-25 + 2^-28 + 2^-29 + ...
+
+B. A 32-bit approximation of 0.1 - x would be:
+
+0.1 - x = 2^-24 + 2^-25 + 2^-28 + 2^-29 = 0.00000009499490261077880859375 seconds
+
+C. Since a tick happens each 0.1 seconds, there are 10 ticks per second.
+An hour is 3600 seconds. At the 100th hour mark, we are at the 3,600,000th tick.
+The total error is calculated by multiplying the total ticks by 0.1 - x, which is
+the precision lost in the computation in each tick. So:
+Total Error = Total Ticks * (0.1 - x) which is approximately 0.34198164939 seconds
+of error.
+
+D. The positional error delta_d is given by the formula:
+            delta_d = v * delta_t
+where v is the target velocity and delta_t is the time delay error, previously computed
+as the total error. Thus:
+            delta_d = 2000 * 0.34198164939 approximately 683.96329878 meters
