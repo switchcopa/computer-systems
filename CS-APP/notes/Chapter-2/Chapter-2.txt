@@ -263,3 +263,98 @@ because it then assumes that since x is positive, y is positive, then
 the result is obviously positive, which is mathematically true, if we ignore
 two's complement overflow. So, we need different ways to see whether the sum
 of two signed integers overflows.
+
+2.4 Floating Point
+
+A floating point representation encodes rational numbers of the form
+V = x * 2^y. It is useful for performing computations involving very
+large numbers, numbers very close to 0, and more generally as an approximation
+to real arithmetic.
+
+Up until the 1980s, every computer manufacturer devised its own conventions
+for how floating-point numbers were represented and the details of the operations
+performed on them. In addition, they often did not worry too much about the
+accuracy of the operations, viewing speed and ease of implementation as being
+more critical than numerical precision.
+
+All of this changed around 1985 with the advent of IEEE Standard 754, a
+carefully crafted standard for representing floating-point numbers and the oper-
+ations performed on them. This effort started in 1976 under Intel’s sponsorship
+with the design of the 8087, a chip that provided floating-point support for the 8086
+processor. Intel hired William Kahan, a professor at the University of California,
+Berkeley, as a consultant to help design a floating-point standard for its future
+processors. They allowed Kahan to join forces with a committee generating an
+industry-wide standard under the auspices of the Institute of Electrical and Elec-
+tronics Engineers (IEEE). The committee ultimately adopted a standard close to
+the one Kahan had devised for Intel. Nowadays, virtually all computers support
+what has become known as IEEE floating point. This has greatly improved the
+portability of scientific application programs across different machines.
+
+In this section, we will see how numbers are represented in the IEEE floating-
+point format. We will also explore issues of rounding, when a number cannot be
+represented exactly in the format and hence must be adjusted upward or down-
+ward. We will then explore the mathematical properties of addition, multiplica-
+tion, and relational operators. Many programmers consider floating point to be
+at best uninteresting and at worst arcane and incomprehensible. We will see that
+since the IEEE format is based on a small and consistent set of principles, it is
+really quite elegant and understandable.
+
+2.4.1 Fractional Binary Numbers
+
+A first step in understanding floating-point numbers is to consider binary numbers
+having fractional values. Let us first examine the more familiar decimal notation.
+Decimal notation uses a representation of the form
+
+            d_m d_m-1 ... d_1 d_0 d_{-1} d_{-2} ... d_{-n+1} d_{-n}
+where each decimal digit d_i ranges between 0 and 9. This notation represents a
+value of the form
+            d = \sum_{i = -n}^m d_i * 10^i
+
+The weighting of the digits is defined relative to the decimal point symbol (‘.’),
+meaning that digits to the left are weighted by nonnegative powers of 10, giving
+integral values, while digits to the right are weighted by negative powers of 10,
+giving fractional values.
+By analogy, consider a notation of the form:
+
+            b_m b_{m-1} ... b_1 b_0 b_-1 b_-2 ... b_{-n+1} b_-n
+where each digit, or bit b_i, is represented as either 0 or 1. The formal
+representation gives the number b:
+            b = \sum_{i = -n}^m b_i * 2^i,
+where each b_k has a weight of 2^k. The symbol '.' now becomes a binary point.
+
+To convert the decimal fraction f of a float to binary, perform the following
+operation:
+
+Multiply by two:
+f * 2 = 2f. If the exponent part of 2f is 1,
+then the resulting bit is 1, same for if it's 0,
+then the bit is 0. Keep track of this bit: b_-1
+Now take the fractional part of 2f and multiply
+it by 2, following the same operation, getting
+the -2th bit. Continue the same operation until
+you get the operation is repeating or the
+candidate fraction is 0, then read your
+binary result from the top to the bottom.
+
+Example:
+
+1/10 = 0.1
+0.1 * 2 = 0.2 -> 0
+0.2 * 2 = 0.4 -> 0
+0.4 * 2 = 0.8 -> 0
+0.8 * 2 = 1.6 -> 1
+0.6 * 2 = 1.2 -> 1
+0.2 * 2 = 0.4 -> 0
+0.4 * 2 = 0.8 -> 0
+0.8 * 2 = 1.6 -> 1
+0.6 * 2 = 1.2 -> 1
+
+Result:
+00011[0011]...
+
+1/4 = 0.25
+0.25 * 2 = 0.5 -> 0
+0.5  * 2 = 1.0 -> 1
+0    * 2 = 0.0 -> 0 ...
+
+.01
