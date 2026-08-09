@@ -18,7 +18,6 @@ struct float_t
     int16_t  exp_E;
     uint32_t fraction_f;
     uint8_t  type;
-    uint8_t  is_aligned_4;
 };
 
 __attribute__((noinline))
@@ -34,8 +33,10 @@ void inspect_float(const void *ptr, struct float_t *out)
 
     if (out->exp_raw == 255)
     {
-        out->type  = FLOAT_T_TYPE_NAN ? 
-                     out->fraction_f != 0 : FLOAT_T_TYPE_INFINITY;
+        if (out->fraction_f != 0)
+            out->type = FLOAT_T_TYPE_NAN;
+        else
+            out->type = FLOAT_T_TYPE_INFINITY;
         out->exp_E = 0;
     }
     else if (out->exp_raw == 0)
@@ -48,23 +49,20 @@ void inspect_float(const void *ptr, struct float_t *out)
         out->type  = FLOAT_T_TYPE_NORMALIZED;
         out->exp_E = out->exp_raw - 127;
     }
-
-    out->is_aligned_4 = (intptr_t)ptr % FLOAT_32_ALIGNMENT == 0;
 }
 
 int main(void)
 {
-    float sample = -0.43879324f;
+    float sample = NAN;
     
     struct float_t test_float;
     inspect_float(&sample, &test_float);
 
-    printf("\nPointer Aligned: %s\n", test_float.is_aligned_4 ? "YES" : "NO");
     printf("Sign:            %u\n", test_float.sign);
     printf("Raw Exponent e:  0x%02X (%u)\n", test_float.exp_raw, test_float.exp_raw);
     printf("Decoded Scale E: %d\n", test_float.exp_E);
     printf("Fraction f:      0x%06X\n", test_float.fraction_f);
-    printf("Category Type:   %u \n\n", test_float.type);
+    printf("Category Type:   %u\n", test_float.type);
 
     return 0;
 }
