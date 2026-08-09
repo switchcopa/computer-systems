@@ -1,46 +1,23 @@
 # computer-systems
-A collection of exercises, notes, experiments, and projects completed while studying computer science and systems programming. This serves as a repository that documents what I learned concerning low level systems programming.
 
-## Topics
+A playground for figuring out how computers actually work from the bottom up. C, assembly, OS and computer architecture stuff, and building systems from scratch.
 
-* C Programming
-* C++
-* Data Structures & Algorithms
-* Problem Solving
-* Computer Architecture
-* Operating Systems
-* Networking
+## Overview
 
-## Purpose
+This repository is where I break and learn things to see how they work under the hood: textbook reading, computer architecture stuff, bare implementations of real world tools, etc....
 
-This repository documents my learning journey through the foundations of computer science, namely C/C++ language semantics, COMP ARCH and operating systems concepts, and overall how computers work under the hood.
+## Repository Structure
 
-Most of the code in this repository consists of:
+* **`c/`** — Low-level C, memory management, pointers, ...
+* **`CS-APP/` & `CS-APP-READING.md`** — My notes, labs, exercises from *Computer Systems: A Programmer's Perspective*.
+* **`K-R/`** — Exercises, notes and solutions from *The C Programming Language* (Kernighan & Ritchie).
+* **`projects/`** — Things I implemented from scratch: custom memory allocators, CLI tools, etc...
 
-* Book exercises, excerpts (K&R, CS:APP)
-* Small implementations
-* Experiments and prototypes
-* Practice problems
-* Study notes
-* Learning projects
+## Environment & Toolchain
 
-## Structure
+* **Language:** C11 / Assembly AT&T x86
+* **Target:** Linux x86-64
+* **Toolchain:** `gcc` , `make`
 
-```text
-computer-systems/
-├── c/
-├── cpp/
-├── CS-APP/
-├── dsa/
-├── lib/
-└── projects/
-```
-
-The structure may change as new topics are explored.
-
-## Current Focus
-
-Currently studying:
-
-* C/C++ Programming
-* Computer Architecture
+---
+*Maintained as a continuous learning sandbox for low-level systems craftsmanship.*
