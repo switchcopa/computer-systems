@@ -1,10 +1,12 @@
 # computer-systems
 
-A playground for figuring out how computers actually work from the bottom up. C, assembly, OS and computer architecture stuff, and building systems from scratch.
+A playground for figuring out how computers actually work from the bottom up. C, assembly, operating systems, computer architecture, and building systems from scratch.
 
 ## Overview
 
-This repository is where I break and learn things to see how they work under the hood: textbook reading, computer architecture stuff, bare implementations of real world tools, etc....
+This repository is where I document and learn things to see what happens under the hood. You'll find notes and solved exercises from books like CS:APP and K&R, paired with implementations of various real-world tools implemented with pure idiomatic C, with syntax and philosophy influenced from Linux Kernel code.
+
+** MY GOAL: ** I'm building this space to build strong a foundation in understanding how computers work, so that eventually I could contribute to open-source software :D
 
 ## Repository Structure
 
