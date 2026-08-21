@@ -6,9 +6,9 @@
 #define HEAP_SIZE 1024 * 1024
 
 struct mem_block {
-        struct mem_block *next_block;
-        size_t block_size;
-        int free;
+    struct mem_block *next_block;
+    size_t block_size;
+    int free;
 };
 
 void            init_allocator(void);
