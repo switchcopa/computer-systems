@@ -1,5 +1,5 @@
 
-/* compile with gcc -g gpf-violation.s -o test 
+/* Compile this with gcc -g gpf-violation.s -o test 
    and then run 'gdb ./test' then it will
    segfault at printf. Inspect the instruction
    pointer with x/i $rip, it will print:
@@ -8,8 +8,9 @@
 => 0x7ffff7c5b8e9 <printf+57>:  movaps %xmm0,-0x80(%rbp)
 
    You see that? It crashed right at the aligned
-   move instruction, and the operating system
-   said that it was a segmentation fault (SIGSEGV).
+   move instruction, the CPU raises a GPF, and
+   the operating system intercepts that exception,
+   and said that it was a segmentation fault (SIGSEGV).
    If you're also on Linux, do:
 
    sudo dmesg | tail -n 5 
@@ -22,6 +23,24 @@
 
    This shows exactly that a general 
    protection fault occurred.
+
+   Now that we are 100% sure that a general protection fault
+   was the purpose of the crash, we can analyze properly
+   why that happened.
+
+   The System V ABI AMD64 specifically mentions that right
+   before a call instruction, the stack pointer should be
+   16-byte aligned:
+
+   "3.2.2 The Stack Frame
+    The end of the input argument area shall be aligned on a 16
+    (32 or 64, if __m256 or __m512 is passed on stack) byte boundary.
+    In other words, the stack needs to be 16 (32 or 64) byte aligned
+    immediately before the call instruction is executed."
+
+   That said, compiler developers can write optimized library
+   code that uses instructions that rely on that assumption,
+   though it's more like a guarantee (e.g. vmovaps, vmovdqa, ...).
 */
 
     .global main
