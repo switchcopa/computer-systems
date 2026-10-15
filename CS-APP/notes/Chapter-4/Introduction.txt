@@ -1,0 +1,125 @@
+Modern microprocessors are among the most complex systems ever created
+by humans. A single silicon chip, roughly the size of a fingernail, can con-
+tain several high-performance processors, large cache memories, and the logic
+required to interface them to external devices. In terms of performance, the pro-
+cessors implemented on a single chip today dwarf the room-size supercomputers
+that cost over $10 million just 20 years ago. Even the embedded processors found
+in everyday appliances such as cell phones, navigation systems, and programmable
+thermostats are far more powerful than the early developers of computers could
+ever have envisioned.
+
+So far, we have only viewed computer systems down to the level of machine-
+language programs. We have seen that a processor must execute a sequence of
+instructions, where each instruction performs some primitive operation, such as
+adding two numbers. An instruction is encoded in binary form as a sequence of
+1 or more bytes. The instructions supported by a particular processor and their
+byte-level encodings are known as its instruction set architecture (ISA). Different
+“families” of processors, such as Intel IA32 and x86-64, IBM/Freescale Power,
+and the ARM processor family, have different ISAs. A program compiled for one
+type of machine will not run on another. On the other hand, there are many dif-
+ferent models of processors within a single family. Each manufacturer produces
+processors of ever-growing performance and complexity, but the different models
+remain compatible at the ISA level. Popular families, such as x86-64, have pro-
+cessors supplied by multiple manufacturers. Thus, the ISA provides a conceptual
+layer of abstraction between compiler writers, who need only know what instruc-
+tions are permitted and how they are encoded, and processor designers, who must
+build machines that execute those instructions.
+
+In this chapter, we take a brief look at the design of processor hardware. We
+study the way a hardware system can execute the instructions of a particular ISA.
+This view will give you a better understanding of how computers work and the
+technological challenges faced by computer manufacturers. One important con-
+cept is that the actual way a modern processor operates can be quite different
+from the model of computation implied by the ISA. The ISA model would seem
+to imply sequential instruction execution, where each instruction is fetched and
+executed to completion before the next one begins. By executing different parts
+of multiple instructions simultaneously, the processor can achieve higher perfor-
+mance than if it executed just one instruction at a time. Special mechanisms are
+used to make sure the processor computes the same results as it would with se-
+quential execution. This idea of using clever tricks to improve performance while
+maintaining the functionality of a simpler and more abstract model is well known
+in computer science. Examples include the use of caching in Web browsers and
+information retrieval data structures such as balanced binary trees and hash tables.
+Chances are you will never design your own processor. This is a task for
+experts working at fewer than 100 companies worldwide. Why, then, should you
+learn about processor design?
+
+. It is intellectually interesting and important.There is an intrinsic value in learn-
+ing how things work. It is especially interesting to learn the inner workings of
+a system that is such a part of the daily lives of computer scientists and engi-
+neers and yet remains a mystery to many. Processor design embodies many of
+the principles of good engineering practice. It requires creating a simple and
+regular structure to perform a complex task.
+. Understanding how the processor works aids in understanding how the overall
+computer system works.In Chapter 6, we will look at the memory system and
+the techniques used to create an image of a very large memory with a very
+fast access time. Seeing the processor side of the processor–memory interface
+will make this presentation more complete.
+. Although few people design processors, many design hardware systems that
+contain processors. This has become commonplace as processors are embed-
+ded into real-world systems such as automobiles and appliances. Embedded-
+system designers must understand how processors work, because these sys-
+tems are generally designed and programmed at a lower level of abstraction
+than is the case for desktop and server-based systems.
+. You just might work on a processor design. Although the number of compa-
+nies producing microprocessors is small, the design teams working on those
+processors are already large and growing. There can be over 1,000 people
+involved in the different aspects of a major processor design.
+
+In this chapter, we start by defining a simple instruction set that we use as a
+running example for our processor implementations. We call this the “Y86-64”
+instruction set, because it was inspired by the x86-64 instruction set. Compared
+with x86-64, the Y86-64 instruction set has fewer data types, instructions, and
+addressing modes. It also has a simple byte-level encoding, making the machine
+code less compact than the comparable x86-64 code, but also much easier to design
+the CPU’s decoding logic. Even though the Y86-64 instruction set is very simple,
+it is sufficiently complete to allow us to write programs manipulating integer data.
+Designing a processor to implement Y86-64 requires us to deal with many of the
+challenges faced by processor designers.
+We then provide some background on digital hardware design. We describe
+the basic building blocks used in a processor and how they are connected together
+and operated. This presentation builds on our discussion of Boolean algebra and
+bit-level operations from Chapter 2. We also introduce a simple language, HCL
+(for “hardware control language”), to describe the control portions of hardware
+systems. We will later use this language to describe our processor designs. Even if
+you already have some background in logic design, read this section to understand
+our particular notation.
+As a first step in designing a processor, we present a functionally correct,
+but somewhat impractical, Y86-64 processor based on sequential operation. This
+processor executes a complete Y86-64 instruction on every clock cycle. The clock
+must run slowly enough to allow an entire series of actions to complete within one
+cycle. Such a processor could be implemented, but its performance would be well
+below what could be achieved for this much hardware.
+With the sequential design as a basis, we then apply a series of transforma-
+tions to create a pipelined processor. This processor breaks the execution of each
+instruction into five steps, each of which is handled by a separate section or stage of
+the hardware. Instructions progress through the stages of the pipeline, with one in-
+struction entering the pipeline on each clock cycle. As a result, the processor can
+be executing the different steps of up to five instructions simultaneously. Mak-
+ing this processor preserve the sequential behavior of the Y86-64 ISA requires
+handling a variety of hazard conditions, where the location or operands of one
+instruction depend on those of other instructions that are still in the pipeline.
+We have devised a variety of tools for studying and experimenting with our
+processor designs. These include an assembler for Y86-64, a simulator for running
+Y86-64 programs on your machine, and simulators for two sequential and one
+pipelined processor design. The control logic for these designs is described by
+files in HCL notation. By editing these files and recompiling the simulator, you can
+alter and extend the simulator’s behavior. A number of exercises are provided that
+involve implementing new instructions and modifying how the machine processes
+instructions. Testing code is provided to help you evaluate the correctness of your
+modifications. These exercises will greatly aid your understanding of the material
+and will give you an appreciation for the many different design alternatives faced
+by processor designers.
+
+Web Aside arch:vlog on page 503 presents a representation of our pipelined
+Y86-64 processor in the Verilog hardware description language. This involves
+creating modules for the basic hardware building blocks and for the overall pro-
+cessor structure. We automatically translate the HCL description of the control
+logic into Verilog. By first debugging the HCL description with our simulators, we
+eliminate many of the tricky bugs that would otherwise show up in the hardware
+design. Given a Verilog description, there are commercial and open-source tools
+to support simulation and logic synthesis, generating actual circuit designs for the
+microprocessors. So, although much of the effort we expend here is to create picto-
+rial and textual descriptions of a system, much as one would when writing software,
+the fact that these designs can be automatically synthesized demonstrates that we
+are indeed creating a system that can be realized as hardware.
