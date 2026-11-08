@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-const uint64_t SECTION_DATA = 0x1000;
-void setup_y86_dram(uint8_t dram[KB64]);
+constexpr uint64_t SECTION_DATA = 0x1000;
+uint8_t *open_bin(const char *fn, long *size);
 
 int main(void)
 {
@@ -16,99 +16,36 @@ int main(void)
 
     cpu->regs[REG_RSP] = RSP_INIT;
     cpu->rip = RIP_INIT;
-    setup_y86_dram(cpu->dmem);
 
+    long size;
+    uint8_t *bin = open_bin("output.bin", &size);
+    if (!bin)
+        return -1;
+
+    memcpy(cpu->dmem, bin, size);
     enum status stat = run_cpu(cpu);
-    for (int i = SECTION_DATA;
-             i < (SECTION_DATA + 8 * sizeof(uint64_t));
-             i += sizeof(uint64_t)) {
-        printf("0x%llX ", cpu->dmem[i]);
-    }
 
-    printf("\n");
     return stat;
 }
 
-void setup_y86_dram(uint8_t dram[KB64])
+uint8_t *open_bin(const char *fn, long *out_size)
 {
-    uint64_t initial_data[8] = {1, 2, 3, 4, 5, 6, 7, 8};
-    memcpy(&dram[SECTION_DATA], initial_data, sizeof(initial_data));
+    long size;
+    uint8_t *buf;
+    FILE *bin = fopen(fn, "rb");
+    if (!bin) {
+        fprintf(stderr, "failed to open file\n");
+        return nullptr;
+    }
 
-    uint8_t start_code[] = {
-    // 0x0000: irmovq $0xF000, %rsp (10 bytes)
-    0x30, 0xf4, 0x00, 0xf0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    fseek(bin, 0, SEEK_END);
+    size = ftell(bin);
+    fseek(bin, 0, SEEK_SET);
 
-    // 0x000A: rrmovq %rsp, %rbp (2 bytes)
-    0x20, 0x45,
+    buf = malloc(size);
+    fread(buf, 1, size, bin);
+    fclose(bin);
 
-    // 0x000C: irmovq $0x1000, %rdi (10 bytes)
-    0x30, 0xf7, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x0016: irmovq $8, %rsi (10 bytes)
-    0x30, 0xf6, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x0020: call mult (target: 0x0050, 9 bytes)
-    0x80, 0x50, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x0029: halt (1 byte)
-    0x00
-    };
-
-    memcpy(&dram[RIP_INIT], start_code, sizeof(start_code));
-
-    uint8_t mult_code[] = {
-    // 0x0050: pushq %rbp (2 bytes)
-    0xa0, 0x5f,
-
-    // 0x0052: rrmovq %rsp, %rbp (2 bytes)
-    0x20, 0x45,
-
-    // 0x0054: rrmovq %rsi, %rcx (2 bytes)
-    0x20, 0x61,
-
-    // 0x0056: rrmovq %rdi, %rax (2 bytes)
-    0x20, 0x70,
-
-    // 0x0058: andq %rcx, %rcx (2 bytes)
-    0x62, 0x11,
-
-    // 0x005A: je .L_done (target: 0x009A, 9 bytes)
-    0x72, 0x9A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x0063: mrmovq 0(%rax), %rdx (10 bytes)
-    0x50, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x006D: addq %rdx, %rdx (2 bytes)
-    0x60, 0x22,
-
-    // 0x006F: rmmovq %rdx, 0(%rax) (10 bytes)
-    0x40, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x0079: irmovq $8, %r8 (10 bytes)
-    0x30, 0xf8, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x0083: addq %r8, %rax (2 bytes)
-    0x60, 0x80,
-
-    // 0x0085: irmovq $1, %r9 (10 bytes)
-    0x30, 0xf9, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // 0x008F: subq %r9, %rcx (2 bytes)
-    0x61, 0x91,
-
-    // 0x0091: jmp .L_loop (target: 0x0058, 9 bytes)
-    0x76, 0x58, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-
-    // .L_done:
-    // 0x009A: rrmovq %rbp, %rsp (2 bytes)
-    0x20, 0x54,
-
-    // 0x009C: popq %rbp (2 bytes)
-    0xb0, 0x5f,
-
-    // 0x009E: ret (1 byte)
-    0x90
-    };
-
-    memcpy(&dram[0x0050], mult_code, sizeof(mult_code));
+    *out_size = size;
+    return buf;
 }

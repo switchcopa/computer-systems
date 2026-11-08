@@ -21,7 +21,7 @@ void fetch(cpu_t *cpu)
     uint8_t insn_spec = cpu->dmem[cpu->rip] >> 4;
     uint8_t insn_len = insn_table[insn_spec].len;
 
-    if (cpu->rip + insn_len >= KB64){
+    if (cpu->rip + insn_len >= KB64) {
         cpu->stat = ADR;
         return;
     }
