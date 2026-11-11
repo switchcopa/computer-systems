@@ -1,18 +1,35 @@
 
-# test.s
-.pos 0x0
-init:
-    irmovq $100, %rax
-    irmovq $200, %rbx
-    addq %rax, %rbx
-    rmmovq %rbx, 8(%rsp)
-    mrmovq 8(%rsp), %rcx
-    call target
-    halt
+.pos 0x1000
+    .quad 0x1
+    .quad 0x2
+    .quad 0x3
+    .quad 0x4
 
-.pos 0x100
-target:
-    subq %rcx, %rax
-    pushq %rax
-    popq %rdx
+.pos 0x0
+main:
+    irmovq  $0xF000, %rsp
+    irmovq  $0x1000, %rdi
+    irmovq  $4, %rsi
+    call double_elements
+    xorq    %rax, %rax
+    ret
+
+double_elements:
+    xorq    %rax, %rax
+    subq    %rax, %rsi
+    je exit
+    irmovq  $1, %r11
+    irmovq  $8, %r8
+    xorq    %r9, %r9
+    rrmovq  %rdi, %rdx
+loop:
+    mrmovq  (%rdx), %rcx
+    addq    %rcx, %rcx
+    rmmovq  %rcx, (%rdx)
+    addq    %r8, %rdx
+    addq    %r11, %r9
+    rrmovq  %rsi, %r10
+    subq    %r9, %r10
+    jg loop
+exit:
     ret

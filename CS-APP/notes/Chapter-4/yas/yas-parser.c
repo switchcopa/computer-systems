@@ -479,7 +479,8 @@ bool yas_parse_pass1(yas_parser *parser)
                         if (!t || t->type == TOKEN_DOT || t->type == TOKEN_COLUMN) break;
                         if (t->type == TOKEN_IDENTIFER && t->payload.ident && 
                             (is_instruction_mnemonic(t->payload.ident) || 
-                            (parser->tok_idx + 1 < parser->lexer->ntokens && parser->lexer->tokens[parser->tok_idx + 1].type == TOKEN_COLUMN))) {
+                            (parser->tok_idx + 1 < parser->lexer->ntokens 
+                             && parser->lexer->tokens[parser->tok_idx + 1].type == TOKEN_COLUMN))) {
                             break;
                         }
                         parser->tok_idx++;
