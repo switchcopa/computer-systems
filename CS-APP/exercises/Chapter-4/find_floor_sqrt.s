@@ -17,9 +17,8 @@ main:
 
 floor_sqrt:
     irmovq  $1, %rax
-    irmovq  $-1, %rsi
     subq    %rdi, %rax
-    cmovge  %rsi, %rax
+    cmovge  %rdi, %rax
     jge exit
     xorq    %rax, %rax
     irmovq  $1, %rdx
