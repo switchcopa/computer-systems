@@ -1,0 +1,29 @@
+
+Practice Problem 4.10 (solution page 520)
+Suppose you want to implement a word-level equality circuit using the exclusive-
+or circuits from Problem 4.9 rather than from bit-level equality circuits. Design
+such a circuit for a 64-bit word consisting of 64 bit-level exclusive-or circuits and
+two additional logic gates.
+
+Let's make this equality circuit. First, we need 2 64-bit input words A and B
+layed down sequentially:
+
+A_0     B_0
+A_1     B_1
+     .
+     .
+     .
+A_63    B_63
+
+We would wire a single-bit XOR gate to every single pair (A_i, B_i),
+we would get a new 64-bit word that has each bit i set if A_i and B_i
+differ, otherwise zero.
+
+Then, we would feed that result to a single
+word 64-bit OR, that would give us a bool signal 0 if every pair is
+identical, and 1 otherwise. The way it works is that it combines the
+bit signals in an internal tree structure that has 16 4-input OR gates,
+then 8 4-input OR gates, then 4, feeding into one final 4-input OR gate.
+
+Lastly, feed that signal to a NOT gate to get the desired 64-bit
+comparator.
